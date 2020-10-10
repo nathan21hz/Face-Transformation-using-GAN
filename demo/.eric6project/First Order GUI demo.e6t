@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Tasks SYSTEM "Tasks-6.0.dtd">
+<!-- eric6 tasks file for project First Order GUI demo -->
+<!-- Saved: 2020-10-10, 20:02:35 -->
+<Tasks version="6.0">
+  <ProjectScanFilter></ProjectScanFilter>
+  <Task priority="1" completed="False" type="2" uid="{0ae0ee7a-93ed-4c7b-821e-e7f7cd708faa}">
+    <Summary>WARNING: Any manual changes made to this file will be lost when pyuic5 is</Summary>
+    <Description></Description>
+    <Created>2020-10-10, 18:00:43</Created>
+    <Resource>
+      <Filename>Ui_MainWindow.py</Filename>
+      <Linenumber>7</Linenumber>
+    </Resource>
+  </Task>
+</Tasks>
