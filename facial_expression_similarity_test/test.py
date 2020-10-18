@@ -2,7 +2,6 @@ import dlib
 import math 
 import cv2          
 
-# Dlib 检测器和预测器
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('./shape_predictor_68_face_landmarks.dat')
 
