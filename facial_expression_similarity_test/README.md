@@ -19,10 +19,12 @@ For each frame in two videos, detect 68 face landmarks. And then calculate the e
 | 20.mp4 | Generated Video using 20.png |
 
 ## Result
-| Video1  | Video2  | Average Frame Distance  |  Average Landmark Distance |
-| ------------ | ------------ | ------------ | ------------ |
-|01.mp4 | 01_copy.mp4 |     0.0 |   0.0 |
-|01.mp4 | 02.mp4      | 2763.18 | 40.62 |
-|01.mp4 | 10.mp4      |  108.64 |  1.60 |
-|01.mp4 | 11.mp4      |  291.04 |  4.28 |
-|01.mp4 | 20.mp4      |  383.53 |  5.64 |
+| Video1  | Video2  | Average Distance  |
+| ------------ | ------------ | ------------ |
+|01.mp4 | 01_copy.mp4 |     0.0 |
+|01.mp4 | 02.mp4      |  0.8356 | 
+|01.mp4 | 10.mp4      |  0.2417 |
+|01.mp4 | 11.mp4      |  0.2876 |
+|01.mp4 | 20.mp4      |  0.8387 |
+
+(distance less than 0.6 then two videos are from the same person)
