@@ -19,7 +19,7 @@
    <string>Artificial Face Generation Model Demo</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,1,0">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,2,0">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>

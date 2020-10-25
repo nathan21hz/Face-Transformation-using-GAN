@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project First Order GUI demo -->
-<!-- Saved: 2020-10-10, 12:00:16 -->
+<!-- Saved: 2020-10-24, 23:43:54 -->
 <!-- Copyright (C) 2020 ,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -22,6 +22,7 @@
     <Source>data/taichi-loading/load_videos.py</Source>
     <Source>demo.py</Source>
     <Source>demo_gui.py</Source>
+    <Source>face_detection.py</Source>
     <Source>frames_dataset.py</Source>
     <Source>logger.py</Source>
     <Source>modules/dense_motion.py</Source>

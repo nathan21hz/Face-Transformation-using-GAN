@@ -76,7 +76,7 @@ class Ui_MainWindow(object):
         self.fps_label.setObjectName("fps_label")
         self.verticalLayout.addWidget(self.fps_label)
         self.verticalLayout.setStretch(0, 1)
-        self.verticalLayout.setStretch(2, 1)
+        self.verticalLayout.setStretch(2, 2)
         MainWindow.setCentralWidget(self.centralWidget)
 
         self.retranslateUi(MainWindow)
