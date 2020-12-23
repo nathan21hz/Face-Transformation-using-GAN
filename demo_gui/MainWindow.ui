@@ -19,7 +19,7 @@
    <string>Artificial Face Generation Model Demo</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,2,0">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="2,0,2,0">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -27,13 +27,78 @@
         <property name="title">
          <string>Source Image</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="4,1">
+        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="2,2,1">
          <item>
-          <widget class="QLabel" name="source_image_label">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QLabel" name="source_image_label">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <property name="lineWidth">
+              <number>0</number>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="source_image_label_2">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <property name="lineWidth">
+              <number>0</number>
+             </property>
+             <property name="text">
+              <string>2</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_7">
+           <item>
+            <widget class="QLabel" name="source_image_label_3">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <property name="lineWidth">
+              <number>0</number>
+             </property>
+             <property name="text">
+              <string>3</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="source_image_label_4">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <property name="lineWidth">
+              <number>0</number>
+             </property>
+             <property name="text">
+              <string>4</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="4,1">
@@ -57,7 +122,14 @@
         <property name="title">
          <string>Driving Video</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1">
+        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="4,1">
+         <item>
+          <widget class="QLabel" name="driving_video_label">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="4,1">
            <item>
@@ -89,7 +161,15 @@
       <property name="title">
        <string>Generated Video</string>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_4"/>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QLabel" name="generated_video_label">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
     <item>

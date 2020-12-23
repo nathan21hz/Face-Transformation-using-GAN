@@ -29,7 +29,7 @@ class VideoBox(QWidget):
         self.pictureLabel = QLabel()
         init_image = QPixmap("../assets/images/no_video.jpeg").scaled(self.width(), self.height())
         self.pictureLabel.setPixmap(init_image)
-        self.pictureLabel.setScaledContents (True)
+        self.pictureLabel.setScaledContents (False)
 
 
         layout = QVBoxLayout(self)

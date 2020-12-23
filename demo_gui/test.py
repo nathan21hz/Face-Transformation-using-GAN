@@ -9,6 +9,7 @@ class first_order():
     def __init__(self, parent=None):
         self.source_image = None
         self.driving_video = []
+        self.driving_video_path = ""
         self.fps = 0
         self.generator = None
         self.kp_detector = None
@@ -30,6 +31,7 @@ class first_order():
         
     def load_drive_video(self, path=""):
         print("loading driving video")
+        self.driving_video_path = path
         reader = imageio.get_reader(path)
         self.fps = reader.get_meta_data()['fps']
         self.driving_video = []

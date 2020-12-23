@@ -13,8 +13,7 @@ def get_euclidean_distance(feature_1, feature_2):
     dist = np.sqrt(np.sum(np.square(feature_1 - feature_2)))
     return dist
 
-def get_feature_vector(image_dir):
-    image = cv2.imread(image_dir)
+def get_feature_vector(image):
     image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     faces = detector(image_gray, 0)
     points = predictor(image, faces[0])
