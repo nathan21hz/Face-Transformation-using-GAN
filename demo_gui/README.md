@@ -14,7 +14,7 @@
 
 3. Run demo_gui.py
 
-    ![Screenshot](img/sc.png)
+    ![Screenshot](img/sc_m.png)
 
 
 
