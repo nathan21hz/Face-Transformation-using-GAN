@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Project SYSTEM "Project-5.1.dtd">
+<!-- eric project file for project First Order GUI demo -->
+<!-- Saved: 2020-12-15, 16:41:27 -->
+<!-- Copyright (C) 2020 ,  -->
+<Project version="5.1">
+  <Language>en_US</Language>
+  <Hash>a563b9e9cfb8b8698567ae3c0316ff44c0b9bfbd</Hash>
+  <ProgLanguage mixed="0">Python3</ProgLanguage>
+  <ProjectType>PyQt5</ProjectType>
+  <Version>0.1</Version>
+  <Author></Author>
+  <Email></Email>
+  <Eol index="0"/>
+  <Sources>
+    <Source>Ui_MainWindow.py</Source>
+    <Source>Videobox.py</Source>
+    <Source>__init__.py</Source>
+    <Source>animate.py</Source>
+    <Source>augmentation.py</Source>
+    <Source>crop-video.py</Source>
+    <Source>data/taichi-loading/load_videos.py</Source>
+    <Source>demo.py</Source>
+    <Source>demo_gui.py</Source>
+    <Source>emotion/__init__.py</Source>
+    <Source>emotion/emotion_detect.py</Source>
+    <Source>face_detection.py</Source>
+    <Source>frames_dataset.py</Source>
+    <Source>head_pose/__init__.py</Source>
+    <Source>head_pose/head_pose.py</Source>
+    <Source>head_pose/hopenetlite_v2.py</Source>
+    <Source>head_pose/stable_hopenetlite.py</Source>
+    <Source>logger.py</Source>
+    <Source>modules/dense_motion.py</Source>
+    <Source>modules/discriminator.py</Source>
+    <Source>modules/generator.py</Source>
+    <Source>modules/keypoint_detector.py</Source>
+    <Source>modules/model.py</Source>
+    <Source>modules/util.py</Source>
+    <Source>reconstruction.py</Source>
+    <Source>run.py</Source>
+    <Source>sync_batchnorm/__init__.py</Source>
+    <Source>sync_batchnorm/batchnorm.py</Source>
+    <Source>sync_batchnorm/comm.py</Source>
+    <Source>sync_batchnorm/replicate.py</Source>
+    <Source>sync_batchnorm/unittest.py</Source>
+    <Source>test.py</Source>
+    <Source>train.py</Source>
+  </Sources>
+  <Forms>
+    <Form>MainWindow.ui</Form>
+  </Forms>
+  <Vcs>
+    <VcsType>None</VcsType>
+  </Vcs>
+  <FiletypeAssociations>
+    <FiletypeAssociation pattern="*.e4p" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.idl" type="INTERFACES"/>
+    <FiletypeAssociation pattern="*.md" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.proto" type="PROTOCOLS"/>
+    <FiletypeAssociation pattern="*.py" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.py3" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.pyw" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.pyw3" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.qm" type="TRANSLATIONS"/>
+    <FiletypeAssociation pattern="*.qrc" type="RESOURCES"/>
+    <FiletypeAssociation pattern="*.rst" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.ts" type="TRANSLATIONS"/>
+    <FiletypeAssociation pattern="*.txt" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.ui" type="FORMS"/>
+    <FiletypeAssociation pattern="GNUmakefile" type="OTHERS"/>
+    <FiletypeAssociation pattern="Makefile" type="OTHERS"/>
+    <FiletypeAssociation pattern="README" type="OTHERS"/>
+    <FiletypeAssociation pattern="README.*" type="OTHERS"/>
+    <FiletypeAssociation pattern="makefile" type="OTHERS"/>
+  </FiletypeAssociations>
+</Project>

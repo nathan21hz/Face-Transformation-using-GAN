@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Ui_MainWindow import Ui_MainWindow
 import sys
+import os
 import numpy as np
 import time
 import cv2
@@ -8,13 +9,23 @@ import face_detection
 from emotion import emotion_detect
 from head_pose import head_pose
 
+from skimage.measure import compare_psnr
+from skimage.measure import compare_ssim
+
 from test import first_order, array2video
+import csv
 
 def get_euclidean_distance(feature_1, feature_2):
     feature_1 = np.array(feature_1)
     feature_2 = np.array(feature_2)
     dist = np.sqrt(np.sum(np.square(feature_1 - feature_2)))
     return dist
+
+def get_filename(file_dir):
+    base = os.path.basename(file_dir)
+    filename = os.path.splitext(base)[0]
+    return filename
+    
 
 class QmyWidget(QtWidgets.QMainWindow): 
     def __init__(self, parent=None):
@@ -34,6 +45,7 @@ class QmyWidget(QtWidgets.QMainWindow):
     def load_source_image(self):
         global original_image_vector
         global original_image_rotation
+        global source_image_filename
         original_image_rotation = []
         directory = QtWidgets.QFileDialog.getOpenFileNames(self,
               "getOpenFileName","./",
@@ -57,13 +69,17 @@ class QmyWidget(QtWidgets.QMainWindow):
             cv2_original_image = cv2.imread(image_dir)
             original_image_rotation.append(head_pose.get_ratation(cv2_original_image))
         print(original_image_rotation)
+        
+        source_image_filename = get_filename(directory[0][0])
         return
         
     def load_drive_video(self):
+        global driving_video_filename
         directory = QtWidgets.QFileDialog.getOpenFileName(self,
               "getOpenFileName","./",
               "MP4 File (*.mp4)") 
         print("drive video", directory)
+        driving_video_filename = get_filename(directory[0])
         self.driving_video["dir"] = directory[0]
         if  self.driving_video["dir"] != "":
             self.ui.dv_lineEdit.setText(self.driving_video["dir"])
@@ -85,14 +101,18 @@ class QmyWidget(QtWidgets.QMainWindow):
                 temp_pixmap = QtGui.QPixmap.fromImage(temp_image)
                 self.ui.driving_video_label.setPixmap(temp_pixmap)
                 driving_video_capture.release()
+                
         
     def generate_video(self):
+        global verify_mode
+        verify_mode = self.ui.verify_checkBox.checkState()
         a.prepare_for_gen()
+        #a.prepare_for_encode()
         
         self.gen_thread.trigger.connect(self.refresh_video)
         self.gen_thread.start()
         
-    def refresh_video(self, generated_image, griving_image, fps, dist, emo_dist, best_img, status):
+    def refresh_video(self, generated_image, griving_image, fps, text, best_img, status):
         image_label_list = [
             self.ui.source_image_label,
             self.ui.source_image_label_2,
@@ -105,17 +125,14 @@ class QmyWidget(QtWidgets.QMainWindow):
             for ilable in image_label_list:
                 ilable.setLineWidth(0)
             image_label_list[best_img].setLineWidth(4)
-            if dist<0.6:
-                self.ui.fps_label.setText("Generating@FPS:{:.4} Face:{:.3}(same) Exp:{:.3}".format(fps, dist, emo_dist))
-            else:
-                self.ui.fps_label.setText("Generating@FPS:{:.4} Face:{:.3}(diff) Exp:{:.3}".format(fps, dist, emo_dist))
+            self.ui.fps_label.setText("Generating@FPS:{:.4} {}".format(fps, text))
         else:
             print("finished")
-            self.ui.fps_label.setText("Replay@FPS:{} AvgDist:{:.3}".format(fps, dist))
+            self.ui.fps_label.setText("Replay@FPS:{} AvgDist:{:.3}".format(fps, text))
 
 
 class GenThread(QtCore.QThread):
-    trigger = QtCore.pyqtSignal((QtGui.QPixmap, QtGui.QPixmap, float, float, float ,int , int))
+    trigger = QtCore.pyqtSignal((QtGui.QPixmap, QtGui.QPixmap, float, str ,int , int))
 
     def __int__(self, parent=None):
         # 初始化函数
@@ -128,26 +145,27 @@ class GenThread(QtCore.QThread):
         curren_frame = 0
         dist_sum = 0
         
+        psnr_sum = 0
+        ssim_sum = 0
+        frame_count = 0
+        
+        if verify_mode:
+            csvfile = open('./data/{}_{}_{}.csv'.format(source_image_filename, driving_video_filename, int(time.time())), 'w', newline='')
+            csvwriter = csv.writer(csvfile)
+            csvwriter.writerow(["frame", "PSNR", "SSIM"])
+        else:
+            pass
+        
         while(curren_frame<a.length):
             start_time = time.time()
             
-            frame = a.generate_frame(curren_frame)
-            video_output.append(frame)
-            temp_image = np.require(frame, np.uint8, 'C')
+            frame_g = a.generate_frame(curren_frame)
+            video_output.append(frame_g)
+            temp_image = np.require(frame_g, np.uint8, 'C')
             temp_image = QtGui.QImage(temp_image, 256, 256, QtGui.QImage.Format_RGB888)
             temp_pixmap = QtGui.QPixmap.fromImage(temp_image)
             
             temp_image.save("./temp/temp.png", "png")
-            
-            #Face recognition
-            emotion_dist = 0
-            dist = 0
-            #'''
-            gen_image = cv2.imread("./temp/temp.png")
-            temp_feature = face_detection.get_feature_vector(gen_image)
-            dist = face_detection.get_euclidean_distance(original_image_vector, temp_feature)
-            #'''
-            dist_sum += dist
             
             driving_video_capture.set(cv2.CAP_PROP_POS_FRAMES, curren_frame)
             success, frame = driving_video_capture.read()
@@ -160,10 +178,13 @@ class GenThread(QtCore.QThread):
 
                 dv_image = QtGui.QImage(rgb.flatten(), width, height, QtGui.QImage.Format_RGB888)
                 dv_pixmap = QtGui.QPixmap.fromImage(dv_image)
+                
             
-            #head pose test
+            gen_image = cv2.imread("./temp/temp.png")
+
+            #Head pose
             best_original_img = 0
-            '''
+            
             driving_video_rotation = head_pose.get_ratation(frame)
             rotataions = []
             for r in original_image_rotation:
@@ -172,24 +193,51 @@ class GenThread(QtCore.QThread):
             best_original_img = np.argmin(rotataions)
             #'''
             
-            #Expression test
-            emotion_dist = emotion_detect.get_emotion_distance(frame, gen_image)
+            if verify_mode:
+                psnr = compare_psnr(frame, gen_image)
+                ssim = compare_ssim(frame, gen_image, multichannel=True)
+                psnr_sum += psnr
+                ssim_sum += ssim
+                status_text = "PSNR:{:.3} SSIM:{:.3}".format(psnr, ssim)
+                csvwriter.writerow([curren_frame, psnr, ssim])
+        
+            else:
+                #Face recognition & Expression test
+                emotion_dist = 0
+                dist = 0
             
+                temp_feature = face_detection.get_feature_vector(gen_image)
+                dist = face_detection.get_euclidean_distance(original_image_vector, temp_feature)
+                dist_sum += dist
+
+                emotion_dist = emotion_detect.get_emotion_distance(frame, gen_image)
+                
+                status_text = "Face:{:.3} Exp:{:.3}".format(dist, emotion_dist)
+                
             end_time = time.time()
             process_time = end_time-start_time
-            curren_frame += 3
-            self.trigger.emit(temp_pixmap, dv_pixmap, 1/process_time, dist, emotion_dist, best_original_img , 1)
+            curren_frame += 1
+            frame_count += 1
+            self.trigger.emit(temp_pixmap, dv_pixmap, 1/process_time, status_text, best_original_img , 1)
             
-        array2video(video_output, round(1/process_time),"1.mp4")
-        self.trigger.emit(QtGui.QPixmap(), QtGui.QPixmap(),  round(1/process_time), dist_sum/len(video_output), 0, 0, 0)
-    
-    
+        #array2video(video_output, round(1/process_time),"1.mp4")
+        array2video(video_output, 30,"{}_{}.mp4".format(source_image_filename, driving_video_filename))
+        self.trigger.emit(QtGui.QPixmap(), QtGui.QPixmap(),  round(1/process_time), "", 0, 0)
+        
+        if verify_mode:
+            print("AVG PSNR:{:.5} SSIM:{:.5}".format(psnr_sum/frame_count, ssim_sum/frame_count))
+            csvfile.close()
+        
 if  __name__ == "__main__":         #用于当前窗体测试
     a = first_order()
     
     original_image_vector = None
     original_image_rotation = []
     
+    verify_mode = False
+    
+    source_image_filename = ""
+    driving_video_filename = ""
     
     app = QtWidgets.QApplication(sys.argv)    #创建GUI应用程序
     form=QmyWidget()                #创建窗体

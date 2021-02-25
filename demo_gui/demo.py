@@ -97,11 +97,52 @@ def make_animation_frame(frame_idx, source, driving, kp_source, kp_driving_initi
         kp_norm = normalize_kp(kp_source=kp_source, kp_driving=kp_driving,
                                kp_driving_initial=kp_driving_initial, use_relative_movement=relative,
                                use_relative_jacobian=relative, adapt_movement_scale=adapt_movement_scale)
+
+        kp_norm_value = kp_norm["value"].cpu().numpy()
+        kp_norm_jacobian = kp_norm["jacobian"].cpu().numpy()
+        #print(kp_norm_value.shape,type(kp_norm_value[0][0][0]))
+        #print(kp_norm_jacobian.shape,type(kp_norm_value[0][0][0]))
+        kp_norm_value_b = kp_norm_value.tobytes()
+        kp_norm_jacobian_b = kp_norm_jacobian.tobytes()
+        kp_norm_b = kp_norm_value_b+kp_norm_jacobian_b
+
         out = generator(source, kp_source=kp_source, kp_driving=kp_norm)
         
         frame = np.transpose(out['prediction'].data.cpu().numpy(), [0, 2, 3, 1])[0]
         frame = img_as_ubyte(frame)
+    return frame,kp_norm_b
+
+def prepare_for_decode(source_image, generator, kp_detector, relative=True, adapt_movement_scale=True, cpu=False):
+    with torch.no_grad():
+        source = torch.tensor(source_image[np.newaxis].astype(np.float32)).permute(0, 3, 1, 2)
+        if not cpu:
+            source = source.cuda()
+        kp_source = kp_detector(source)
+    return source, kp_source
+
+def make_animation_frame_decode(kp_norm_b,source,kp_source, generator, kp_detector, relative=True, adapt_movement_scale=True, cpu=False):
+    kp_norm_value_b = kp_norm_b[:80]
+    kp_norm_jacobian_b = kp_norm_b[80:]
+    kp_norm_value = np.frombuffer(kp_norm_value_b, dtype=np.float32).reshape((1, 10, 2))
+    kp_norm_jacobian = np.frombuffer(kp_norm_jacobian_b, dtype=np.float32).reshape((1, 10, 2, 2))
+    if cpu:
+        kp_norm = {
+            "value":torch.tensor(kp_norm_value),
+            "jacobian":torch.tensor(kp_norm_jacobian)
+        }
+    else:
+        kp_norm = {
+            "value":torch.tensor(kp_norm_value).cuda(),
+            "jacobian":torch.tensor(kp_norm_jacobian).cuda()
+        }
+        
+    out = generator(source, kp_source=kp_source, kp_driving=kp_norm)
+        
+    frame = np.transpose(out['prediction'].data.cpu().numpy(), [0, 2, 3, 1])[0]
+    frame = img_as_ubyte(frame)
+
     return frame
+
 
 def find_best_frame(source, driving, cpu=False):
     import face_alignment

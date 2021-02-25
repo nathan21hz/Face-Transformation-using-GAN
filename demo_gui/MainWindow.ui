@@ -150,11 +150,22 @@
      </layout>
     </item>
     <item>
-     <widget class="QPushButton" name="generate_pushButton">
-      <property name="text">
-       <string>Generate</string>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,3">
+      <item>
+       <widget class="QCheckBox" name="verify_checkBox">
+        <property name="text">
+         <string>PSNR SSIM</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="generate_pushButton">
+        <property name="text">
+         <string>Generate</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QGroupBox" name="groupBox">
